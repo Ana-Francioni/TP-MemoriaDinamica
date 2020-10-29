@@ -2,7 +2,7 @@
 
 int main(){
     struct pila *p=NULL, *aux;
-    int op,i=0,j;
+    int op;
     datos_t dat;
 
     bienvenida();
@@ -11,7 +11,6 @@ int main(){
         leerdat (&dat);
         p = apilar (&aux, p, dat);
         op=menu();
-        i++;
     }    
     while (p){
         desapilar (&p); 
