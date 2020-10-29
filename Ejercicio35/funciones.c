@@ -66,6 +66,7 @@ void archivar (datos_t d){
         printf ("\nSe archivo el contacto con ID: %.4d\n", darchivo.id);
     }
     fclose (fp);
+    return;
 }
 
 void imprimir (datos_t dt){
