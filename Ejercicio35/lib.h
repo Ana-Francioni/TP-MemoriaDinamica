@@ -7,6 +7,7 @@
 #include <string.h>
 
 typedef struct {
+    int id;
     char nombre[20];
     char apellido [20];
     char edad;
@@ -20,10 +21,7 @@ struct pila{
     struct pila *p;
 };
 
-typedef struct {
-    int id;
-    datos_t datos;
-} darchivo_t;
+
 
 void bienvenida (void);
 int menu (void);

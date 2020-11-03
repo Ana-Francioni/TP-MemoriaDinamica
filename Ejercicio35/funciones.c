@@ -54,15 +54,30 @@ void desapilar (struct pila **p){
 
 void archivar (datos_t d){
     FILE *fp;
-    darchivo_t darchivo;
-    if (!(fp=fopen ("contactos.dat", "ab")))
-        printf("\nNo se pudo abrir el archivo ""contactos.dat""\n");
+    int id;
+    datos_t darchivo, bf;
+    if (!(fp=fopen ("contactos.dat", "ab+")))
+        printf("\nNo se pudo crear el archivo ""contactos.dat""\n");
     else{
         imprimir (d);
-        darchivo.id = id();
-        darchivo.datos = d;
+        printf ("\nIngrese el ID de este contacto:\t");
+        fflush (stdin);
+        scanf ("%d", &id);
+        fseek (fp, 0L, 0);
+        fread (&bf, sizeof (datos_t), 1, fp);
+        while (!feof(fp)){
+            while (bf.id == id){
+                printf ("\nID ya ingresado, ingrese uno nuevo: \t");
+                fflush (stdin);
+                scanf ("%d", &id);
+            }
+        fread (&bf, sizeof (datos_t), 1, fp);   
+        }
+        d.id = id;
+        darchivo = d;
+        fseek (fp, 0L, 2);
         //fwrite (&darchivo, sizeof(darchivo_t), 1, fp);
-        if ((fwrite (&darchivo, sizeof(darchivo_t), 1, fp))==1)
+        if ((fwrite (&darchivo, sizeof(datos_t), 1, fp))==1)
         printf ("\nSe archivo el contacto con ID: %.4d\n", darchivo.id);
     }
     fclose (fp);
@@ -78,29 +93,3 @@ void imprimir (datos_t dt){
     return;
 }
 
-int id (void){
-    FILE *faux;
-    darchivo_t bf;
-    int id;
-    printf ("\nIngrese el ID de este contacto:\t");
-    if (!(faux = fopen ("contactos.dat", "rb"))){
-        fflush (stdin);
-        scanf ("%d", &id);
-        return id;
-    } else{
-        fflush (stdin);
-        scanf ("%d", &id);
-        fread (&bf, sizeof (darchivo_t), 1, faux);
-        while (!feof(faux)){
-            while (bf.id == id){
-                printf ("\nID ya ingresado, ingrese uno nuevo: \t");
-                fflush (stdin);
-                scanf ("%d", &id);
-            }
-        fread (&bf, sizeof (darchivo_t), 1, faux);   
-        }
-        fclose (faux);
-        return id;
-    }
-    
-}
