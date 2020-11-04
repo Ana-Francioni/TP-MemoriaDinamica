@@ -126,6 +126,7 @@ struct lista * listar (struct lista **p, struct lista**u, datos_t d){
     }
     aux= NULL;
     free (aux);
+    return;
 }
 void archivar (struct lista **p, struct lista**u){
     FILE * fp;
@@ -151,5 +152,6 @@ void archivar (struct lista **p, struct lista**u){
         
     }
     fclose (fp);
+    return;
 
 }
