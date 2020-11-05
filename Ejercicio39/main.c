@@ -15,7 +15,7 @@ typedef struct{
 }d_archivo_t;
 
 struct lista{
-    d_archivo_t dat;
+    datos_t dat;
     struct lista *l;
     
 };
