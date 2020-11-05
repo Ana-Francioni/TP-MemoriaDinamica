@@ -20,7 +20,7 @@ typedef struct{
 }d_archivo_t;
 
 struct pila{
-    d_archivo_t dat;
+    datos_t dat;
     struct pila *l;
     
 };
@@ -63,7 +63,7 @@ void funcion (unsigned int id, struct pila **p){
             checkbit(b, bf.inf.estado, 0);
             if (a && b){
                 aux=(struct pila *)malloc (sizeof (struct pila));
-                aux->dat=bf;
+                aux->dat=bf.inf;
                 aux->l=*p;
                 *p=aux;
                 aux=NULL;
