@@ -30,7 +30,7 @@ void bienvenida (void);
 int menu (void);
 void leerdat (datos_t *);
 void carga_est (datos_t *);
-struct lista * listar (struct lista **, struct lista**, datos_t);
+void listar (struct lista **, struct lista**, datos_t);
 void archivar (struct lista **, struct lista**);
 
 int main(){
@@ -78,10 +78,11 @@ void carga_est (datos_t *d){
     printf ("\nEl valor de estado asignado es: %d", d->estado);
     return;
 }
-struct lista * listar (struct lista **p, struct lista**u, datos_t d){
+void listar (struct lista **p, struct lista**u, datos_t d){
     struct lista *aux, *r;
     lista_t k;
     unsigned char a, b;
+    int j=1;
     aux=(struct lista *)malloc(sizeof(struct lista));
     aux->dat=d;
     if (*p==NULL) k=0;
@@ -105,21 +106,35 @@ struct lista * listar (struct lista **p, struct lista**u, datos_t d){
             } 
             else{
                 r=*p;
-                a=r->l->dat.potencia;
-                while (r->l && b<a){
-                    r=r->l;
-                    a=r->l->dat.potencia;
-                }
-                if (r==(*u)){
-                    aux->l=NULL;
-                    r->l=aux;
-                    r=aux;
-                            
+                if (r->l==NULL){
+                    aux->l = (*p)->l;
+                    (*p)->l = aux;
+
                 }else
-                    {
-                        aux->l=r->l;
-                        r->l=aux;
+                {
+                    a=r->l->dat.potencia;
+                
+                    while (r->l && b<a){
+                        
+                        r=r->l;
+                        if (r->l !=NULL) a=r->l->dat.potencia;
+                    
                     }
+                    if (r==*u){
+                        
+                        (*u)->l=aux;
+                        *u=aux;
+                        (*u)->l=NULL;
+                                
+                    }else
+                        {
+                            
+                            aux->l=r->l;
+                            r->l=aux;
+                        }
+                }
+                
+                
             }
         printf ("\nSe añadio un elemento a la lista");
         break;
