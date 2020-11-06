@@ -27,31 +27,34 @@ struct pila{
 
 void funcion (unsigned int, struct pila **);
 
+
 void funcion (unsigned int id, struct pila **p){
-    FILE *fp;
-    d_archivo_t bf;
+    FILE *fp, *fp2;
+    d_archivo_t bf, bf2;
+    unsigned int clave, i=0, j, a, b;
     char *paux, pinv[60];
-    int i=0, j, a, b;
     struct pila *aux;
-    if ((fp=fopen (".../ejercicio39/potencia.dat", "rb+"))==NULL){
+    if ((fp=fopen ("../ejercicio39/potencia.dat", "rb+"))==NULL){
         printf ("\nNo se pudo abrir el archivo potencia.dat");
     }else
     {
-        fseek (fp, (1L)*sizeof(d_archivo_t)*(id-1), 0);
+        
+        fseek (fp, (long)sizeof (d_archivo_t)*(id-1), 0);
+        fread (&bf, sizeof (d_archivo_t), 1, fp);
         if (bf.id==id){
-            fread (&bf, sizeof (datos_t), 1, fp);
+            
             paux=bf.inf.desc;
             while (*paux && *paux!= ' '){
                 *paux ++;
                 i++;
             }
-            if (*paux==0 || *paux==' ') *paux--;
+            *paux--;
             for (j=0; j<i; j++){
                 pinv[j]=*paux;
                 *paux--;
             }
             pinv[i]=0;
-            printf ("\nLa primer palabra de descripcion invertida es:", pinv);
+            printf ("\nLa primer palabra de descripcion invertida es: %s", pinv);
             togglebit(bf.inf.estado, 3);
             fseek (fp, (-1L)*sizeof(d_archivo_t), 1);
             if (fwrite(&bf, sizeof(d_archivo_t), 1, fp)==1){
@@ -67,13 +70,38 @@ void funcion (unsigned int id, struct pila **p){
                 aux->l=*p;
                 *p=aux;
                 aux=NULL;
+                printf ("\nSe apilo el registro");
                 free (aux);
                 
             }else
             {
-                /* pendiente archivar el registro en el nuevo archivo "salida.dat" */
+                if ((fp2=fopen("salida.dat", "ab+"))==0){
+                    printf("\nError al abrir el archivo salida.dat");
+                }
+                else{
+                    
+                    printf ("\nIngrese la clave para archivar este registro:\t");
+                    fflush (stdin);
+                    scanf ("%d", &clave);
+                    fseek (fp2, 0L, 0);
+                    fread (&bf2, sizeof (d_archivo_t), 1, fp2);
+                    while (!feof(fp2)){
+                        while (bf2.id == clave){
+                                    printf ("\nClave ya ingresada, ingrese uno nuevo: \t");
+                                    fflush (stdin);
+                                    scanf ("%d", &clave);
+                        }
+                        fread (&bf, sizeof (datos_t), 1, fp2);   
+                    }
+                    bf.id = clave;
+                    fseek (fp2, 0L, 2);
+                    if ((fwrite (&bf, sizeof(d_archivo_t), 1, fp2))==1)
+                    printf ("\nSe archivo el registro con clave: %.4d\n", bf.id);
+                }
+                        
+                fclose (fp2);
             }
-            
+                printf ("\nregistro archivado en salida.dat");   
 
             
         }else{
@@ -84,5 +112,4 @@ void funcion (unsigned int id, struct pila **p){
     fclose (fp);
     return;
 }
-
 
